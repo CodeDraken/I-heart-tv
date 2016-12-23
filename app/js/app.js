@@ -1,63 +1,143 @@
-// TODO add left and right arrow button functions
 
 // load the static site
-$( document ).ready( function() {
+$(document).ready(function() {
 
   // get 6 now playing movies and popular TV shows and insert them
   // generate HTML posts from data
-  generatePosts( nowPlayingMovies, '#moviePostRow', 'movies' );
-  generatePosts( popTV, '#tvPostRow', 'tv' );
+  generatePosts(nowPlayingMovies, '#moviePostRow', 'movie');
+  generatePosts(popTV, '#tvPostRow', 'tv');
 
   // Clicking on a movie poster
-  $( '.post' ).on( 'click', function() {
+  $('.post').on('click', function() {
     var $this = this;
-    changeActive( $this )
-  } );
+    changeActivePost($this)
+  });
 
-} );
+  // clicking on expand arrows
+  $('.expandArrow').on('click', function() {
+    var $this = this,
+      id = $this.id;
+
+    switch (id) {
+      case 'prevMovie':
+        changeActivePost(postsModule.selectPost('#moviePostRow', postsModule.prevActive('movie')));
+        break;
+      case 'nextMovie':
+        changeActivePost(postsModule.selectPost('#moviePostRow', postsModule.nextActive('movie')));
+        break;
+      case 'prevTV':
+        changeActivePost(postsModule.selectPost('#tvPostRow', postsModule.prevActive('tv')));
+        break;
+      case 'nextTV':
+        changeActivePost(postsModule.selectPost('#tvPostRow', postsModule.nextActive('tv')));
+        break;
+    }
+  });
+
+}); // document ready
 
 // smooth scroll
-$( 'a[href^=\\#]' ).on( 'click', function( event ) {
-  var $root = $( 'html, body' );
+$('a[href^=\\#]').on('click', function(event) {
+  var $root = $('html, body');
   event.preventDefault();
-  $( $root ).animate( { scrollTop: $( this.hash ).offset().top }, 500 );
-} );
+  $($root).animate({ scrollTop: $(this.hash).offset().top }, 500);
+});
 
-function changeActive( $this ) {
-  if ( $( $this ).hasClass( 'active' ) ) {
+
+var postsModule = (function() {
+  // not zero index
+  var moviePostAmount = 0,
+    tvPostAmount = 0,
+    activeMovie = 1,
+    activeTV = 1;
+
+  return {
+    setActive: function(postType, index){
+      if (postType == 'movie') {
+        activeMovie = index;
+      } else {
+        activeTV = index;
+      }
+    },
+    nextActive: function(postType) {
+      // returns the index of the next post
+      if (postType == 'movie') {
+        console.log('curr movie', activeMovie);
+        activeMovie++;
+        console.log('next movie', activeMovie);
+        console.log('result movie', activeMovie > moviePostAmount ? activeMovie = 1 : activeMovie);
+        return activeMovie > moviePostAmount ? activeMovie = 1 : activeMovie;
+      } else {
+        activeTV++;
+        return activeTV > tvPostAmount ? activeTV = 1 : activeTV;
+      }
+    },
+    prevActive: function(postType) {
+      // returns the index of the previous post
+      if (postType == 'movie') {
+        activeMovie--;
+        return activeMovie < 1 ? activeMovie = moviePostAmount : activeMovie;
+      } else {
+        activeTV--;
+        return activeTV < 1 ? activeTV = tvPostAmount : activeTV;
+      }
+    },
+    setPostAmount: function(postType, amount) {
+      // set the amount of posts that are displaying
+      postType == 'movie' ? moviePostAmount = amount : tvPostAmount = amount;
+    },
+    getPostAmount: function(postType) {
+      // get the amount of posts that are displaying
+      return postType == 'movie' ? moviePostAmount : tvPostAmount;
+    },
+    selectPost: function(postRow, index) {
+      var post = $(postRow + ' .post').eq(index-1)[0];
+      return post;
+    }
+  };
+
+
+}());
+
+
+function changeActivePost($this) {
+  if ($($this).hasClass('active')) {
     // do nothing
   } else {
-    var parentID = $( $this ).parent().attr( 'id' );
+    var parentID = $($this).parent().attr('id');
     var expandHolder = parentID == 'moviePostRow' ? '#expandHolder' : '#expandHolderTwo';
 
     // do transition
-    $( expandHolder + ' .post-expand-wrapper' ).css( 'opacity', 0 );
+    $(expandHolder + ' .post-expand-wrapper').css('opacity', 0);
 
-    // remove all active classes // TODO remove only that section's active classes
-    $( '.post' ).removeClass( 'active' );
+    // remove all active classes in that row
+    $( '#' + parentID + ' .post').removeClass('active');
     // add active class to the clicked poster
-    $( $this ).addClass( 'active' );
+    $($this).addClass('active');
+    // update the posts module active index number
+    postsModule.setActive($this.dataset.postType, Number($this.dataset.indexNum)+1);
 
     // delayed for transition
-    setTimeout( function() {
+    setTimeout(function() {
       // load info in the expanded display
-      loadPostInfo( $this.dataset.postType, $this.dataset.indexNum, expandHolder );
-    }, 500 )
+      loadPostInfo($this.dataset.postType, Number($this.dataset.indexNum), expandHolder);
+    }, 500)
 
   }
 }
 
 // get 6 posts from a data object and insert them into rowID
-function generatePosts( data, rowID, postType ) {
+function generatePosts(data, rowID, postType) {
   // the resulting HTML row
   var postRow = '';
+  var i;
 
-  for ( var i = 0; i < 6; i++ ) {
+  for (i = 0; i < 6; i++) {
     // each movie / tv show is an object dataPost
-    var dataPost = data.results[ i ];
+    var dataPost = data.results[i];
 
-    if ( dataPost == undefined ) {
-      $( rowID ).html( postRow );
+    if (dataPost == undefined) {
+      $(rowID).html(postRow);
       return;
     } else {
       // movies use title tv shows use name
@@ -74,47 +154,49 @@ function generatePosts( data, rowID, postType ) {
       postRow += htmlPost;
 
       // load the expanded the first post
-      loadPostInfo( postType, 0 );
+      loadPostInfo(postType, 0);
     } // if
   } // for
-  $( rowID ).html( postRow );
+  // save the amount of generated posts
+  postsModule.setPostAmount(postType, i);
+  $(rowID).html(postRow);
 };
 
 
-function loadPostInfo( postType, index, expandHolder ) {
+function loadPostInfo(postType, index, expandHolder) {
 
-  if ( postType == 'movies' ) {
-    var postInfo = nowPlayingMovies.results[ index ];
+  if (postType == 'movie') {
+    var postInfo = nowPlayingMovies.results[index];
 
-    $( '#expand-title' ).text( postInfo.title );
-    addTrophy( ( '#expand-trophy-container' ), Math.ceil( postInfo.vote_average / 2 ) );
-    $( '#expand-desc' ).text( postInfo.overview );
-    $( '#expand-poster' ).html( '<img src="https://image.tmdb.org/t/p/w300' + postInfo.poster_path + '" alt="">' );
+    $('#expand-title').text(postInfo.title);
+    addTrophy(('#expand-trophy-container'), Math.ceil(postInfo.vote_average / 2));
+    $('#expand-desc').text(postInfo.overview);
+    $('#expand-poster').html('<img src="https://image.tmdb.org/t/p/w300' + postInfo.poster_path + '" alt="">');
 
-    $( expandHolder + ' .post-expand-wrapper' ).css( 'opacity', 1 );
+    $(expandHolder + ' .post-expand-wrapper').css('opacity', 1);
 
   } else {
-    var postInfo = popTV.results[ index ];
+    var postInfo = popTV.results[index];
 
-    $( '#expand-title-two' ).text( postInfo.name );
-    addTrophy( ( '#expand-trophy-container-two' ), Math.ceil( postInfo.vote_average / 2 ) );
-    $( '#expand-desc-two' ).text( postInfo.overview );
-    $( '#expand-poster-two' ).html( '<img src="https://image.tmdb.org/t/p/w300' + postInfo.poster_path + '" alt="">' );
+    $('#expand-title-two').text(postInfo.name);
+    addTrophy(('#expand-trophy-container-two'), Math.ceil(postInfo.vote_average / 2));
+    $('#expand-desc-two').text(postInfo.overview);
+    $('#expand-poster-two').html('<img src="https://image.tmdb.org/t/p/w300' + postInfo.poster_path + '" alt="">');
 
     // transition in
-    $( expandHolder + ' .post-expand-wrapper' ).css( 'opacity', 1 );
+    $(expandHolder + ' .post-expand-wrapper').css('opacity', 1);
 
   }
 
 }
 
 
-function addTrophy( element, amount ) {
+function addTrophy(element, amount) {
   var trophyHTML = '';
-  for ( var i = 0; i < amount; i++ ) {
+  for (var i = 0; i < amount; i++) {
     trophyHTML += '<i class="fa fa-trophy" aria-hidden="true"></i>';
   }
-  $( element ).html( trophyHTML );
+  $(element).html(trophyHTML);
 }
 
 

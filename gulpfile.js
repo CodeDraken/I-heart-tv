@@ -2,8 +2,9 @@
 // Required modules | Path Location Variables
 // ////////////////////////////////////////////////////////////////////////////
 
-var gulp = require( 'gulp' ),
+const gulp = require( 'gulp' ),
   uglify = require( 'gulp-uglify' ),
+  babel = require( 'gulp-babel' ),
   sass = require( 'gulp-sass' ),
   plumber = require( 'gulp-plumber' ),
   autoprefixer = require( 'gulp-autoprefixer' ),
@@ -12,14 +13,14 @@ var gulp = require( 'gulp' ),
   rename = require( 'gulp-rename' ),
   del = require( 'del' );
 
-var jsLoc = 'app/js/**/*.js',
+const jsLoc = 'app/js/**/*.js',
   jsExclude = '!app/js/**/*.min.js',
   scssMainLoc = 'app/scss/main.scss',
   scssFolder = 'app/scss/**/*.scss',
   htmlLoc = 'app/**/*.html',
   baseLoc = './app/';
 
-var cssDest = 'app/css/',
+const cssDest = 'app/css/',
   jsDest = 'app/js';
 
 
@@ -33,6 +34,9 @@ gulp.task( 'scripts', function() {
   gulp.src( [ jsLoc, jsExclude ] )
     .pipe( plumber() )
     .pipe( rename( { suffix: '.min' } ) )
+    .pipe( babel( {
+      presets: [ 'es2015' ]
+    } ) )
     .pipe( uglify() )
     .pipe( gulp.dest( jsDest ) )
     .pipe( reload( { stream: true } ) );
