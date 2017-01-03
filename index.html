@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Movie and TV show information">
+  <meta name="author" content="Evan @CodeDraken on Github">
+
+  <title>IHeartTV</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Oswald:400,700" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.min.css" />
+
+  <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+  <nav class="clearfix navbar">
+    <div class="pull-left">
+      <a href="#"><h1 class="logo">I<i class="fa fa-heart" aria-hidden="true"></i>TV</h1></a>
+    </div>
+
+    <div class="pull-right links">
+      <a href="#latest-movies">Movies</a>
+      <span>|</span>
+      <a href="#top-tv">TV Shows</a>
+    </div>
+  </nav>
+
+  <header class="hero clearfix">
+    <div class="hero-wrapper">
+
+      <div class="poster">
+        <img src="img/transformer.jpg" alt="featured movie transformers">
+      </div>
+
+      <div class="info">
+        <h2 class="title">Transformers - The Last Knight</h2>
+        <div class="trophy-container">
+          <i class="fa fa-trophy" aria-hidden="true"></i>
+          <i class="fa fa-trophy" aria-hidden="true"></i>
+          <i class="fa fa-trophy" aria-hidden="true"></i>
+          <i class="fa fa-trophy" aria-hidden="true"></i>
+          <i class="fa fa-trophy dim" aria-hidden="true"></i>
+        </div>
+
+        <p class="desc">Optimus Prime finding his home planet, Cybertron, now a dead planet, which he comes to find he was responsible for killing. He finds a way to bring the planet back to life, but in order to do so he needs to find an artifact, and that artifact
+          is on Earth</p>
+
+        <p class="desc-footer">PG-13 <span>|</span> 102 min <span>|</span> Action, Adventure <span>|</span> June 2017</p>
+      </div>
+
+    </div>
+  </header>
+
+  <section id="latest-movies">
+    <div class="display container">
+
+      <div class="clearfix attribution">
+        <p class="footer-api pull-left">
+          API provided by
+        </p>
+        <img class="tmdb-logo" src="https://www.themoviedb.org/assets/41bdcf10bbf6f84c0fc73f27b2180b95/images/v4/logos/91x81.png">
+      </div>
+
+      <div class="nav clearfix">
+        <h2 class="text-left">Latest Movies</h2>
+        <a href="#" class="text-right clearfix">View All Movies</a>
+      </div>
+      <div id="moviePostRow" class="row clearfix">
+
+        <!-- <div class="post active">
+          <img class="display-img" src="img/rogue.jpg" alt="">
+          <h3 class="title">Rogue One</h3>
+        </div> -->
+
+        <!-- load posts from JS / API -->
+
+      </div>
+    </div>
+
+    <!-- expand -->
+    <div class="container expand-display" id="expandHolder">
+      <div class="post-expand">
+        <div class="post-expand-wrapper">
+          <div class="prev-item expandArrow" id="prevMovie">
+            <i class="fa fa-angle-left" aria-hidden="true"></i>
+          </div>
+          <div class="next-item expandArrow" id="nextMovie">
+            <i class="fa fa-angle-right" aria-hidden="true"></i>
+          </div>
+          <div class="expand-info" id="expand-info">
+
+            <h3 class="expand-title" id="expand-title"></h3>
+
+            <div class="expand-trophy-container" id="expand-trophy-container">
+              <!-- <i class="fa fa-trophy" aria-hidden="true"></i> -->
+            </div>
+
+            <p class="expand-desc" id="expand-desc"></p>
+
+            <p class="expand-desc-footer" id="expand-desc-footer">
+              <!--
+              <span class="audience"></span>
+              <span class="sep">|</span>
+              <span class="duration"></span>
+              <span class="sep">|</span>
+              <span class="genre"></span>
+              <span class="sep">|</span>
+              <span class="release_date"></span>
+              -->
+            </p>
+
+          </div>
+
+          <div class="expand-poster" id="expand-poster"></div>
+
+        </div>
+      </div>
+    </div>
+    <!-- /expand -->
+
+
+  </section>
+
+  <section id="top-tv">
+    <div class="display container">
+      <div class="nav clearfix">
+        <h2 class="text-left">Popular TV Shows</h2>
+        <a href="#" class="text-right clearfix">View All Shows</a>
+      </div>
+      <div id="tvPostRow" class="row clearfix">
+
+        <!-- load posts from JS / API -->
+
+      </div>
+    </div>
+
+    <!-- expand two -->
+    <div class="container expand-display" id="expandHolderTwo">
+      <div class="post-expand">
+        <div class="post-expand-wrapper">
+          <div class="prev-item expandArrow" id="prevTV">
+            <i class="fa fa-angle-left" aria-hidden="true"></i>
+          </div>
+          <div class="next-item expandArrow" id="nextTV">
+            <i class="fa fa-angle-right" aria-hidden="true"></i>
+          </div>
+          <div class="expand-info" id="expand-info-two">
+
+            <h3 class="expand-title" id="expand-title-two"></h3>
+
+            <div class="expand-trophy-container" id="expand-trophy-container-two">
+              <!-- <i class="fa fa-trophy" aria-hidden="true"></i> -->
+            </div>
+
+            <p class="expand-desc" id="expand-desc-two"></p>
+
+            <p class="expand-desc-footer" id="expand-desc-footer-two">
+              <!--
+              <span class="audience"></span>
+              <span class="sep">|</span>
+              <span class="duration"></span>
+              <span class="sep">|</span>
+              <span class="genre"></span>
+              <span class="sep">|</span>
+              <span class="release_date"></span>
+              -->
+            </p>
+
+          </div>
+
+          <div class="expand-poster" id="expand-poster-two"></div>
+
+        </div>
+      </div>
+    </div>
+    <!-- /expand -->
+
+  </section>
+
+  <section id="subscribe">
+    <div class="container">
+      <div class="sign-up">
+        <h2>Get the latest Movie and TV Show news straight into your inbox each week.</h2>
+        <div class="inputs">
+          <input id="form-email" type="email" placeholder="Your Email">
+          <br>
+          <button class="submit">Subscribe</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="clearfix">
+    <div class="container">
+      <div class="footer-center">
+        <p>Copyright &copy; 2017 IHeartTV all rights reserved</p>
+      </div>
+      <div class="clearfix">
+        <p class="pull-left light">Site created by Evan <a href="https://github.com/CodeDraken">@CodeDraken on Github</a></p>
+        <p class="footer-api pull-right">This product uses the TMDb API but is not endorsed or certified by TMDb.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+
+
+  </script>
+  <script src="js/app.min.js"></script>
+</body>
+
+</html>
